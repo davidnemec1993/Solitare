@@ -1,0 +1,345 @@
+/* =========================================================
+   Spider Solitaire – Mountfield Edition  |  style.css
+   ========================================================= */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --felt:        #1a6b30;
+  --felt-dark:   #14571f;
+  --felt-light:  #1e7d35;
+  --card-w:      90px;
+  --card-h:      126px;
+  --card-radius: 8px;
+  --toolbar-h:   54px;
+  --red:         #c0392b;
+  --black:       #1a1a2e;
+  --gold:        #f0c040;
+  --shadow:      rgba(0,0,0,0.45);
+}
+
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--felt);
+  color: #fff;
+  user-select: none;
+}
+
+/* ── Loading overlay ── */
+#loading-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(20,87,31,0.97);
+  display: flex; align-items: center; justify-content: center;
+}
+.loading-content { text-align: center; }
+.loading-logo { height: 60px; margin-bottom: 16px; filter: brightness(10); }
+.loading-content h2 { font-size: 1.8rem; margin-bottom: 8px; }
+.loading-content p  { opacity: 0.8; margin-bottom: 20px; }
+.spinner {
+  width: 44px; height: 44px; margin: 0 auto;
+  border: 4px solid rgba(255,255,255,0.2);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Dialogs ── */
+.dialog {
+  position: fixed; inset: 0; z-index: 900;
+  background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+}
+.dialog.hidden { display: none; }
+
+.dialog-content {
+  background: linear-gradient(160deg, #1e7d35 0%, #14571f 100%);
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 36px 48px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  min-width: 360px;
+}
+.dialog-logo { height: 50px; margin-bottom: 16px; filter: brightness(10); }
+.dialog-content h2 { font-size: 1.8rem; margin-bottom: 8px; }
+.dialog-content p  { opacity: 0.85; margin-bottom: 20px; }
+
+.difficulty-buttons {
+  display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+}
+
+/* ── Win dialog ── */
+.win-trophy { font-size: 4rem; margin-bottom: 12px; }
+.win-content p { margin-bottom: 8px; }
+
+/* ── Buttons ── */
+.btn {
+  padding: 10px 20px;
+  border: none; border-radius: 8px;
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
+  outline: none;
+}
+.btn:hover  { filter: brightness(1.15); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+.btn:active { filter: brightness(0.9);  transform: translateY(0); }
+
+.btn-easy   { background: #27ae60; color: #fff; min-width: 100px; }
+.btn-medium { background: #e67e22; color: #fff; min-width: 100px; }
+.btn-hard   { background: #c0392b; color: #fff; min-width: 100px; }
+.btn-primary{ background: #ec1c24; color: #fff; }
+.btn-toolbar{ background: rgba(255,255,255,0.18); color: #fff; font-size: 0.82rem; padding: 6px 14px; }
+.btn-toolbar:hover { background: rgba(255,255,255,0.3); }
+
+/* ── Toolbar ── */
+#toolbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--toolbar-h);
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.toolbar-left  { display: flex; align-items: center; gap: 10px; }
+.toolbar-right { display: flex; align-items: center; gap: 8px; }
+.toolbar-center{ display: flex; align-items: center; gap: 14px; }
+.toolbar-logo  { height: 30px; filter: brightness(10); }
+.game-title    { font-size: 1rem; font-weight: 700; opacity: 0.9; }
+
+.stat-box { text-align: center; }
+.stat-label { display: block; font-size: 0.65rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-value { display: block; font-size: 1.1rem; font-weight: 700; }
+
+/* ── Game area ── */
+#game-area {
+  position: absolute;
+  top: var(--toolbar-h);
+  left: 0; right: 0; bottom: 0;
+  padding: 12px 16px 12px 16px;
+  overflow: hidden;
+}
+
+/* ── Foundations ── */
+#foundations {
+  position: absolute;
+  top: 14px; right: 16px;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+}
+.foundations-label {
+  font-size: 0.7rem; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.5px;
+  text-align: right; margin-bottom: 2px;
+}
+#foundation-piles {
+  display: grid;
+  grid-template-columns: repeat(4, var(--card-w));
+  gap: 6px;
+}
+
+.foundation-pile {
+  width: var(--card-w); height: var(--card-h);
+  border: 2px dashed rgba(255,255,255,0.25);
+  border-radius: var(--card-radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; opacity: 0.6;
+  position: relative;
+  overflow: hidden;
+}
+.foundation-pile.filled {
+  border-color: var(--gold);
+  opacity: 1;
+  background: rgba(240,192,64,0.1);
+}
+.foundation-pile .mini-card-stack {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Tableau ── */
+#tableau {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  right: calc(var(--card-w) * 4 + 50px);
+  bottom: 80px;
+  display: flex; gap: 8px;
+}
+
+.tableau-column {
+  flex: 1;
+  position: relative;
+  min-height: 100%;
+}
+
+.column-placeholder {
+  width: 100%; height: var(--card-h);
+  border: 2px dashed rgba(255,255,255,0.2);
+  border-radius: var(--card-radius);
+  position: absolute; top: 0; left: 0;
+}
+.column-placeholder.drop-target {
+  border-color: var(--gold);
+  background: rgba(240,192,64,0.1);
+}
+
+/* ── Stock ── */
+#stock-area {
+  position: absolute;
+  bottom: 16px; right: 16px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+
+#stock-pile {
+  width: var(--card-w); height: var(--card-h);
+  border-radius: var(--card-radius);
+  background: linear-gradient(135deg, #c0392b 0%, #96281b 100%);
+  border: 2px solid rgba(255,255,255,0.3);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 3px 3px 8px var(--shadow);
+  transition: transform 0.1s, box-shadow 0.1s;
+  position: relative;
+  overflow: hidden;
+}
+#stock-pile::before {
+  content: '';
+  position: absolute; inset: 4px;
+  background-image: url('https://cdn.mountfield.cz/public/frontend/images/logo.svg');
+  background-size: contain; background-repeat: no-repeat; background-position: center;
+  opacity: 0.35; filter: brightness(10);
+}
+#stock-pile:hover  { transform: translateY(-2px); box-shadow: 3px 6px 16px var(--shadow); }
+#stock-pile:active { transform: translateY(0); }
+#stock-pile.empty  { background: linear-gradient(135deg, #555 0%, #333 100%); cursor: default; opacity: 0.5; }
+#stock-count {
+  position: relative; z-index: 1;
+  font-size: 1.4rem; font-weight: 700;
+  color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+#stock-hint { font-size: 0.7rem; opacity: 0.6; }
+
+/* ── Cards ── */
+.card {
+  position: absolute;
+  width: var(--card-w);
+  height: var(--card-h);
+  border-radius: var(--card-radius);
+  border: 1px solid rgba(0,0,0,0.2);
+  box-shadow: 2px 2px 6px var(--shadow);
+  cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.15s;
+  overflow: hidden;
+}
+.card:hover { box-shadow: 3px 4px 14px var(--shadow); }
+
+/* face-down */
+.card.face-down {
+  background: linear-gradient(135deg, #c0392b 0%, #7b241c 100%);
+  cursor: default;
+}
+.card.face-down::after {
+  content: '';
+  position: absolute; inset: 5px;
+  background-image: url('https://cdn.mountfield.cz/public/frontend/images/logo.svg');
+  background-size: contain; background-repeat: no-repeat; background-position: center;
+  opacity: 0.3; filter: brightness(10);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+}
+
+/* face-up */
+.card.face-up {
+  background: #fff;
+  color: var(--black);
+}
+.card.face-up.red-suit { color: var(--red); }
+
+/* product image on face-up card */
+.card-image {
+  position: absolute;
+  top: 20px; left: 2px; right: 2px; bottom: 20px;
+  background-size: cover; background-position: center;
+  opacity: 0.22;
+  border-radius: 4px;
+}
+.card-image.loaded { opacity: 0.28; }
+
+/* card value/suit labels */
+.card-tl, .card-br {
+  position: absolute;
+  font-size: 0.75rem; font-weight: 700; line-height: 1.1;
+  padding: 3px 5px;
+}
+.card-tl { top: 0; left: 0; text-align: left; }
+.card-br {
+  bottom: 0; right: 0;
+  transform: rotate(180deg);
+  text-align: left;
+}
+.card-tl .suit-sym,
+.card-br .suit-sym { display: block; font-size: 0.8rem; }
+
+/* center suit symbol */
+.card-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* selected / drag */
+.card.selected {
+  outline: 3px solid var(--gold);
+  outline-offset: -2px;
+  z-index: 50 !important;
+}
+.card.dragging {
+  opacity: 0.8;
+  z-index: 200 !important;
+  transform: scale(1.04) rotate(1deg);
+  box-shadow: 6px 8px 24px rgba(0,0,0,0.6);
+}
+.card.hint-highlight {
+  outline: 3px solid #00e5ff;
+  outline-offset: -2px;
+  animation: hint-pulse 0.8s ease-in-out infinite alternate;
+}
+@keyframes hint-pulse {
+  from { box-shadow: 0 0 6px #00e5ff; }
+  to   { box-shadow: 0 0 20px #00e5ff; }
+}
+
+/* drop preview */
+.card.drop-valid {
+  outline: 3px solid #4caf50;
+  outline-offset: -2px;
+}
+
+/* sequence complete animation */
+.card.sequence-complete {
+  animation: sequence-fly 0.5s ease-in forwards;
+}
+@keyframes sequence-fly {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(1.1) translateY(-10px); opacity: 0.9; }
+  100% { transform: scale(0.6) translateY(-60px); opacity: 0; }
+}
+
+/* ── Card tooltip ── */
+#card-tooltip {
+  position: fixed;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  pointer-events: none;
+  z-index: 9999;
+  max-width: 180px;
+}
+#card-tooltip.hidden { display: none; }

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spider Solitaire – Mountfield Edition</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div id="loading-overlay">
+  <div class="loading-content">
+    <img src="https://cdn.mountfield.cz/public/frontend/images/logo.svg"
+         alt="Mountfield" class="loading-logo" onerror="this.style.display='none'" />
+    <h2>Spider Solitaire</h2>
+    <p>Loading Mountfield products…</p>
+    <div class="spinner"></div>
+  </div>
+</div>
+
+<!-- New game dialog -->
+<div id="new-game-dialog" class="dialog hidden">
+  <div class="dialog-content">
+    <img src="https://cdn.mountfield.cz/public/frontend/images/logo.svg"
+         alt="Mountfield" class="dialog-logo" onerror="this.style.display='none'" />
+    <h2>Spider Solitaire</h2>
+    <p>Choose difficulty:</p>
+    <div class="difficulty-buttons">
+      <button class="btn btn-easy"   data-suits="1">🌱 Easy<br><small>1 Suit</small></button>
+      <button class="btn btn-medium" data-suits="2">🌿 Medium<br><small>2 Suits</small></button>
+      <button class="btn btn-hard"   data-suits="4">🌳 Hard<br><small>4 Suits</small></button>
+    </div>
+  </div>
+</div>
+
+<!-- Win dialog -->
+<div id="win-dialog" class="dialog hidden">
+  <div class="dialog-content win-content">
+    <div class="win-trophy">🏆</div>
+    <h2>Congratulations!</h2>
+    <p id="win-score-text"></p>
+    <p id="win-time-text"></p>
+    <button class="btn btn-primary" id="win-new-game">Play Again</button>
+  </div>
+</div>
+
+<!-- Header toolbar -->
+<header id="toolbar">
+  <div class="toolbar-left">
+    <img src="https://cdn.mountfield.cz/public/frontend/images/logo.svg"
+         alt="Mountfield" class="toolbar-logo" onerror="this.style.display='none'" />
+    <span class="game-title">Spider Solitaire</span>
+  </div>
+  <div class="toolbar-center">
+    <div class="stat-box">
+      <span class="stat-label">Score</span>
+      <span class="stat-value" id="score">500</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">Moves</span>
+      <span class="stat-value" id="moves">0</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">Time</span>
+      <span class="stat-value" id="timer">0:00</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">Complete</span>
+      <span class="stat-value" id="foundations-count">0/8</span>
+    </div>
+  </div>
+  <div class="toolbar-right">
+    <button class="btn btn-toolbar" id="btn-undo" title="Undo (Ctrl+Z)">↩ Undo</button>
+    <button class="btn btn-toolbar" id="btn-hint" title="Hint">💡 Hint</button>
+    <button class="btn btn-toolbar btn-primary" id="btn-new-game">New Game</button>
+  </div>
+</header>
+
+<!-- Main game area -->
+<main id="game-area">
+  <!-- Foundation piles (top-right) -->
+  <div id="foundations">
+    <div class="foundations-label">Completed</div>
+    <div id="foundation-piles"></div>
+  </div>
+
+  <!-- Tableau -->
+  <div id="tableau"></div>
+
+  <!-- Stock pile -->
+  <div id="stock-area">
+    <div id="stock-pile" title="Deal 10 cards (one per column)">
+      <span id="stock-count"></span>
+    </div>
+    <div id="stock-hint">Click to deal</div>
+  </div>
+</main>
+
+<!-- Card tooltip -->
+<div id="card-tooltip" class="hidden"></div>
+
+<script src="game.js"></script>
+<script src="renderer.js"></script>
+</body>
+</html>
